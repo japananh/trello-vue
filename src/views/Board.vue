@@ -45,6 +45,16 @@
           />
         </div>
       </div>
+
+      <div class="column flex">
+        <input
+          type="text"
+          v-model="newColumnName"
+          class="p-2 mr-2 flex-grow"
+          placeholder="+ Enter new column"
+          @keyup.enter="createColumn"
+        />
+      </div>
     </div>
 
     <div class="task-bg" v-if="isTaskOpen" @click.self="close">
@@ -57,6 +67,11 @@
 import { mapState } from "vuex";
 
 export default {
+  data: function() {
+    return {
+      newColumnName: ""
+    };
+  },
   computed: {
     ...mapState(["board"]),
     isTaskOpen() {
@@ -76,6 +91,11 @@ export default {
         name: e.target.value
       });
       e.target.value = "";
+    },
+    createColumn() {
+      this.$store.commit("CREATE_COLUMN", { name: this.newColumnName });
+
+      this.newColumnName = "";
     },
     pickupTask(e, taskIndex, fromColumnIndex) {
       e.dataTransfer.effectAllowed = "move";
